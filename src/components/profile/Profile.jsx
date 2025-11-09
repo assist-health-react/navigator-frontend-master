@@ -218,7 +218,7 @@ const Profile = () => {
     setSuccess('');
 
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('accessToken');
       if (!token) {
         throw new Error('Authentication token not found');
       }

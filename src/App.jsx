@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 import Logo from './components/Logo'
 import { Header } from './components/common/Header'
 import { FaChevronLeft, FaChevronRight, FaChartBar, FaUserMd, FaUsers, 
-  FaStar, FaCalendarAlt, FaNewspaper, FaCog, FaClinicMedical } from 'react-icons/fa'
+  FaStar, FaCalendarAlt, FaNewspaper, FaCog,FaBars , FaClinicMedical } from 'react-icons/fa'
 import './App.css'
 import Dashboard from './components/dashboard'
 import Doctors from './components/Doctors/index'
@@ -39,61 +39,61 @@ const Layout = ({ children }) => {
     localStorage.removeItem('isAuthenticated');
     // Add any other logout logic here
   };
-
+const iconColor = '#3ea767';
   const navigation = [
     { 
       name: 'Dashboard', 
       path: '/', 
-      icon: <FaChartBar />, 
+      icon: <FaChartBar  style={{ color: iconColor }} />, 
       color: 'text-purple-500',
       description: 'Overview and Analytics'
     },
     { 
       name: 'Appointments', 
       path: '/appointments', 
-      icon: <FaCalendarAlt />, 
+      icon: <FaCalendarAlt  style={{ color: iconColor }} />, 
       color: 'text-blue-500',
       description: 'Schedule and Manage Appointments'
     },
     { 
       name: 'Members', 
       path: '/members', 
-      icon: <FaUsers />, 
+      icon: <FaUsers   style={{ color: iconColor }} />, 
       color: 'text-indigo-500',
       description: 'Manage Patient Records'
     },
     { 
       name: 'Doctors', 
       path: '/doctors', 
-      icon: <FaUserMd />, 
+      icon: <FaUserMd  style={{ color: iconColor }}/>, 
       color: 'text-green-500',
       description: 'Healthcare Providers Management'
     },
-    { 
-      name: 'Empanelled Doctors', 
-      path: '/empanelled-doctors', 
-      icon: <FaClinicMedical />, 
-      color: 'text-teal-500',
-      description: 'Network Healthcare Providers'
-    },
+    // { 
+    //   name: 'Empanelled Doctors', 
+    //   path: '/empanelled-doctors', 
+    //   icon: <FaClinicMedical  style={{ color: iconColor }} />, 
+    //   color: 'text-teal-500',
+    //   description: 'Network Healthcare Providers'
+    // },
     { 
       name: 'Ahana', 
       path: '/ahana', 
-      icon: <FaStar />, 
+      icon: <FaStar  style={{ color: iconColor }} />, 
       color: 'text-yellow-500',
       description: 'School Health Platform'
     },
     { 
       name: 'Blog', 
       path: '/blog', 
-      icon: <FaNewspaper />, 
+      icon: <FaNewspaper  style={{ color: iconColor }} />, 
       color: 'text-pink-500',
       description: 'Health Articles & Updates'
     },
     { 
       name: 'Settings', 
       path: '/settings', 
-      icon: <FaCog />, 
+      icon: <FaCog  style={{ color: iconColor }} />, 
       color: 'text-gray-500',
       description: 'System Preferences'
     }
@@ -101,28 +101,50 @@ const Layout = ({ children }) => {
 
   return (
     <div className="min-h-screen h-screen bg-gray-100 flex overflow-hidden">
+
+        {/* Mobile Header */}
+              <div className="lg:hidden flex items-center justify-between bg-white p-3 shadow-md fixed top-0 left-0 right-0 z-30">
+                <div className="flex items-center gap-2">
+                  <button 
+                    onClick={() => setSidebarExpanded(!isSidebarExpanded)} 
+                    className="p-2 rounded-md hover:bg-gray-100"
+                  >
+                    <FaBars className="w-6 h-6 text-gray-700" />
+                  </button>
+                  <img src="/assets/logo_new.png" alt="AssistHealth" className="h-8 object-contain" />
+                </div>
+              </div>
       {/* Sidebar - Now collapsible */}
-      <aside 
+      {/* <aside 
         className={`flex bg-white shadow-lg flex-col fixed h-full transition-all duration-300 ease-in-out
           ${isSidebarExpanded ? 'w-72' : 'w-20'} mobile:hidden tablet:flex`}
-      >
+      > */}
+        <aside
+  className={`fixed inset-y-0 left-0 z-40 bg-white shadow-lg flex flex-col transition-all duration-300 ease-in-out
+    ${isSidebarExpanded ? "w-72" : "w-20"} 
+    ${isSidebarExpanded ? "translate-x-0" : "-translate-x-full"} 
+    lg:translate-x-0`}
+>
         {/* Logo Section */}
         <div className="p-2 sm:p-4 border-b flex items-center justify-between">
           {isSidebarExpanded ? (
             <div className="flex items-center gap-2 sm:gap-3">
               <img 
-                src="/assets/assist-health-logo.png" 
+                //src="/assets/assist-health-logo.png" 
+                src="/assets/logo_new.png" 
                 alt="AssistHealth" 
-                className="h-8 w-8 sm:h-10 sm:w-10 object-contain"
+                className="h-12 w-auto"
+                //className="h-12 w-8 sm:h-10 sm:w-10 object-contain"
               />
-              <div className="text-lg sm:text-xl font-semibold">
+              {/* <div className="text-lg sm:text-xl font-semibold">
                 <span className="text-gray-800">Assist</span>
                 <span className="text-[#38B6FF]">Health</span>
-              </div>
+              </div> */}
             </div>
           ) : (
             <img 
-              src="/assets/assist-health-logo.png" 
+             // src="/assets/assist-health-logo.png" 
+              src="/assets/logo_new.png" 
               alt="AH" 
               className="h-8 w-8 sm:h-10 sm:w-10 object-contain"
             />

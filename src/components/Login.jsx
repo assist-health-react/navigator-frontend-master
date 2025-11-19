@@ -53,7 +53,8 @@ const Login = () => {
         {/* Left side - GIF */}
         <div className="w-3/5 p-4 flex items-center justify-center">
           <img 
-            src="/assets/Medical care.gif" 
+          src="/assets/login_img.gif" 
+            // src="/assets/Medical care.gif" 
             alt="Medical Care"
             className="w-full h-auto object-contain min-h-[400px]"
           />
@@ -67,16 +68,22 @@ const Login = () => {
           {/* Logo and Title */}
           <div className="text-center mb-8">
             <div className="flex justify-center mb-4">
-              <img 
+              {/* <img 
                 src="/assets/assist-health-logo.png" 
                 alt="AssistHealth" 
                 className="h-12 w-12 object-contain"
-              />
+              /> */}
+                <img 
+              src="/assets/logo_new.png" 
+              alt="AssistHealth" 
+              className=" object-contain"
+              style={{ width: 300  }} 
+            />
             </div>
-            <div className="text-2xl font-semibold">
+            {/* <div className="text-2xl font-semibold">
               <span className="text-gray-800">Assist</span>
               <span className="text-[#38B6FF]">Health</span>
-            </div>
+            </div> */}
             <h2 className="text-xl font-medium text-gray-700 mt-2">Navigator Login</h2>
             <p className="text-gray-600 mt-2">Sign in to your account</p>
           </div>

@@ -103,14 +103,17 @@ const StatsGrid = () => {
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    // <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8 w-full">
+
       {stats.map((item) => (
         <div
           key={item.name}
           className={`${item.gradient} rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 hover:scale-105 hover:brightness-110 cursor-pointer`}
           onClick={() => handleClick(item.path)}
         >
-          <div className="p-6 relative">
+         <div className="p-4 sm:p-6 relative">
+
             <div className="absolute top-0 right-0 w-32 h-32 -mr-8 -mt-8 bg-white/10 rounded-full blur-2xl"></div>
             <div className="relative">
               <div className="flex items-center justify-between">

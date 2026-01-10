@@ -1,0 +1,67 @@
+# name: Deploy Admin Backend
+
+# on:
+#   push:
+#     branches: [main]
+
+# jobs:
+#   deploy:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v4
+
+#       - uses: appleboy/ssh-action@v1
+#         with:
+#           host: ${{ secrets.EC2_HOST }}
+#           username: ${{ secrets.EC2_USER }}
+#           key: ${{ secrets.EC2_KEY }}
+#           script: |
+#             rsync -av --delete $GITHUB_WORKSPACE/ ~/assist-health/navigator-frontend-master/
+#             cd ~/assist-health
+#             docker compose -f docker-compose.admin.yml build navigator_frontend
+#             docker compose -f docker-compose.admin.yml up -d navigator_frontend
+
+name: Deploy Navigator Frontend
+
+on:
+  push:
+    branches:
+      - main
+
+# ✅ PREVENT MULTIPLE STUCK DEPLOYS
+concurrency:
+  group: navigator-frontend-deploy
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_KEY }}
+
+          # ✅ SAFETY NET (NO HANGING)
+          timeout: 15m
+          command_timeout: 15m
+
+          script: |
+            set -e
+
+            echo "📂 Go to Navigator frontend repo"
+            cd /home/ec2-user/assist-health/admin-frontend-master
+
+            echo "⬇ Pull latest code"
+            git pull origin main
+
+            echo "🐳 Build & restart Navigator frontend"
+            cd /home/ec2-user/assist-health
+            docker compose -f docker-compose.users.yml build navigator_frontend
+            docker compose -f docker-compose.users.yml up -d --build navigator_frontend

@@ -63,7 +63,7 @@ const AddEditDoctor = ({ onClose, initialData, isEditing, onSuccess }) => {
     }
   });
  
-  //17.1.26
+  //17.1.26 test
   const BASE_URL = import.meta.env.VITE_API_URL ;
   useEffect(() => {
   fetchSpecialties();

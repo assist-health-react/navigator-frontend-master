@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { FaTimes } from 'react-icons/fa'
 import { useSnackbar } from '../../../contexts/SnackbarContext'
 import { doctorsService } from '../../../services/doctorsService'
+//import { doctorsService } from '../../../services/AHdoctorsService'
 import FileUploadSection from './FileUploadSection'
 import BasicInfoSection from './BasicInfoSection'
 import QualificationSection from './QualificationSection'
@@ -13,12 +14,21 @@ import IntroductionSection from './IntroductionSection'
 const AddEditDoctor = ({ onClose, initialData, isEditing, onSuccess }) => {
   const { showSnackbar } = useSnackbar();
   const [isSubmitting, setIsSubmitting] = useState(false);
+    const [specialtyOptions, setSpecialtyOptions] = useState([]);//17.1.26
   const [formData, setFormData] = useState({
     name: initialData?.name || '',
     email: initialData?.email || '',
-    phone: initialData?.phone || '',
+   // phone: initialData?.phone || '',
+   phone: initialData?.phone
+  ? initialData.phone.replace(/\D/g, '').slice(-10)
+  : '',
     gender: initialData?.gender || '',
-    speciality: initialData?.specializations?.map(spec => ({ value: spec, label: spec })) || [],
+    //speciality: initialData?.specializations?.map(spec => ({ value: spec, label: spec })) || [],
+    speciality: initialData?.specializations?.map(spec => ({
+      value: spec._id,
+      label: spec.name
+    })) || [], //17.1.26
+        customSpeciality: initialData?.customSpeciality || '',//17.1.26
     qualification: initialData?.qualification || [],
     medicalCouncilRegistrationNumber: initialData?.medicalCouncilRegistrationNumber || '',
     experienceYears: initialData?.experienceYears || '',
@@ -52,7 +62,43 @@ const AddEditDoctor = ({ onClose, initialData, isEditing, onSuccess }) => {
       country: 'India'
     }
   });
+ 
+  //17.1.26
+  const BASE_URL = import.meta.env.VITE_API_URL ;
+  useEffect(() => {
+  fetchSpecialties();
+  }, []);
+const fetchSpecialties = async () => {
+  try {
+    const token = localStorage.getItem('token'); // or authStorage
 
+    const res = await fetch(`${BASE_URL}/api/v1/doctors/specialties`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    const json = await res.json();
+
+    if (json.status !== 'success') {
+      throw new Error(json.message || 'Failed to load specialties');
+    }
+
+    const options = json.data.map(s => ({
+      value: s._id,
+      label: s.name
+    }));
+
+    // UI-only option
+    options.push({ value: 'other', label: 'Others' });
+
+    setSpecialtyOptions(options);
+  } catch (err) {
+    console.error('Failed to load specialties', err);
+  }
+};
+
+ //END-17.1.26
   // Update the formatTimeSlots function
   const formatTimeSlots = (slots) => {
     return slots.map(slot => ({
@@ -465,12 +511,37 @@ const AddEditDoctor = ({ onClose, initialData, isEditing, onSuccess }) => {
     }));
   };
 
-  const handleSpecialityChange = (selectedOptions) => {
-    setFormData(prev => ({
-      ...prev,
-      speciality: selectedOptions || []
-    }));
-  };
+  // const handleSpecialityChange = (selectedOptions) => {
+  //   setFormData(prev => ({
+  //     ...prev,
+  //     speciality: selectedOptions || []
+  //   }));
+  // };
+   //17.1.26
+const handleSpecialityChange = (selectedOptions = []) => {
+  // If "Others" is selected
+  const hasOther = selectedOptions.some(opt => opt.value === 'other');
+
+  let finalSelection = [];
+
+  if (hasOther) {
+    // Keep ONLY "Others"
+    finalSelection = selectedOptions.filter(opt => opt.value === 'other');
+  } else {
+    // Keep ONLY normal specialities (remove "Others" if exists)
+    finalSelection = selectedOptions.filter(opt => opt.value !== 'other');
+  }
+
+  setFormData(prev => ({
+    ...prev,
+    speciality: finalSelection,
+
+    // Clear custom text if Others is removed
+    customSpeciality: finalSelection.some(opt => opt.value === 'other')
+      ? prev.customSpeciality
+      : ''
+  }));
+};
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -516,8 +587,8 @@ const AddEditDoctor = ({ onClose, initialData, isEditing, onSuccess }) => {
       const formattedTimeSlots = formatTimeSlots(formData.onlineConsultationTimeSlots);
 
       // Format phone number with +91 prefix if not already present
-      const formattedPhone = formData.phone.startsWith('+91') ? formData.phone : `+91${formData.phone}`;
-
+     // const formattedPhone = formData.phone.startsWith('+91') ? formData.phone : `+91${formData.phone}`;
+const formattedPhone = formData.phone.replace(/\D/g, '').slice(-10);
       // Prepare the data object according to API requirements
       const data = {
         name: formData.name,
@@ -529,7 +600,9 @@ const AddEditDoctor = ({ onClose, initialData, isEditing, onSuccess }) => {
         experienceYears: parseInt(formData.experienceYears),
         languagesSpoken: formData.languagesSpoken,
         serviceTypes: formData.serviceTypes,
-        specializations: formData.speciality.map(s => s.value),
+       // specializations: formData.speciality.map(s => s.value),
+          specializations: formData.speciality.map(s => s.value),//17.1.26
+        customSpeciality: formData.customSpeciality,//17.1.26
         introduction: formData.introduction,
         onlineConsultationTimeSlots: formData.serviceTypes.includes('online') 
           ? formatTimeSlots(formData.onlineConsultationTimeSlots) 
@@ -634,6 +707,7 @@ const AddEditDoctor = ({ onClose, initialData, isEditing, onSuccess }) => {
             formData={formData}
             handleInputChange={handleInputChange}
             handleSpecialityChange={handleSpecialityChange}
+                specialtyOptions={specialtyOptions}//17.1.26
           />
 
           <QualificationSection

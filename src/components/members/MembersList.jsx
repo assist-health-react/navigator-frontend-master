@@ -18,9 +18,12 @@ const MembersList = ({
   handleSelectAll,
   setSelectedMember,
   loading,
-  onScroll,
+  //onScroll,
   onEditNote,
-  onDeleteNote
+  onDeleteNote,
+  onRefresh,
+  page,
+  limit
 }) => {
   // Add state for both modals
   const [showViewMedicalHistory, setShowViewMedicalHistory] = useState(false);
@@ -117,16 +120,23 @@ const MembersList = ({
     return member.phone || 'N/A';
   };
 
+    //16.1.2026
+   const handleMedicalHistoryRefresh = () => {
+  onRefresh && onRefresh(); // refresh members list
+};
+
   return (
-    <div className="relative h-[600px]">
+    <div className="relative ">
       <div className="overflow-x-auto">
         <div className="inline-block min-w-full align-middle">
-          <div className="overflow-hidden border-b border-gray-200">
+          {/* <div className="overflow-hidden border-b border-gray-200">
             <div 
               className="max-h-[600px] overflow-y-auto scroll-smooth" 
-              onScroll={onScroll}
-              style={{ scrollBehavior: 'smooth' }}
-            >
+             // onScroll={onScroll}
+            //  style={{ scrollBehavior: 'smooth' }}
+            > */}
+            <div className="w-full h-full flex flex-col">
+      <div className="relative flex-1 overflow-x-auto">
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-white sticky top-0">
                   <tr className="border-b border-gray-200">
@@ -182,7 +192,8 @@ const MembersList = ({
                         />
                       </td>
                       <td className="px-3 lg:px-6 py-3 lg:py-4 whitespace-nowrap text-sm">
-                        {index + 1}
+                       {/* {index + 1} */}
+                        {(page - 1) * limit + index + 1}
                       </td>
                       <td className="px-3 lg:px-6 py-3 lg:py-4 whitespace-nowrap text-sm">
                         {profile.memberId || 'N/A'}
@@ -255,24 +266,66 @@ const MembersList = ({
                   <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
                 </div>
               )}
+
+              
             </div>
           </div>
         </div>
       </div>
 
       {/* Medical History Modals */}
-      {showViewMedicalHistory && (
+      {/* {showViewMedicalHistory && (
         <MedicalHistoryList
           member={selectedMemberForHistory}
           onClose={() => setShowViewMedicalHistory(false)}
         />
+      )} */}
+
+        {showViewMedicalHistory && selectedMemberForHistory && (
+        <MedicalHistoryList
+          key={selectedMemberForHistory._id || selectedMemberForHistory.id}
+          member={selectedMemberForHistory}
+          // onClose={() => {
+          //   setShowViewMedicalHistory(false);
+          //   setSelectedMemberForHistory(null);
+          // }}
+           onClose={() => setShowViewMedicalHistory(false)}
+           onRefresh={handleMedicalHistoryRefresh} // 🔥
+        />
       )}
 
-      {showAddMedicalHistory && (
+      {/* {showAddMedicalHistory && (
         <AddMedicalHistory
           member={selectedMemberForHistory}
           onClose={() => setShowAddMedicalHistory(false)}
           onSave={handleSaveMedicalHistory}
+        />
+      )} */}
+      {showAddMedicalHistory && selectedMemberForHistory && (
+        <AddMedicalHistory
+          member={selectedMemberForHistory}
+
+          /* 🔥 PLUS ICON = CREATE MODE */
+          isEdit={false}
+          initialData={null}
+
+          onClose={() => {
+            setShowAddMedicalHistory(false);
+          }}
+
+          onSave={async () => {
+            // fetch updated member so UI updates without refresh
+            const memberId =
+              selectedMemberForHistory._id || selectedMemberForHistory.id;
+
+            const response = await membersService.getMemberById(memberId);
+
+            if (response?.status === 'success') {
+              setSelectedMemberForHistory(response.data);
+            }
+
+            setShowAddMedicalHistory(false);
+          }}
         />
       )}
     </div>

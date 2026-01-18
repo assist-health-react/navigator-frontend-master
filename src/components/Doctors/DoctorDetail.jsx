@@ -207,13 +207,13 @@ Email: ${doctor.email}
               <div className="flex items-center justify-between">
                 <h3 className="text-2xl font-semibold text-gray-900">Doctor Details</h3>
                 <div className="flex items-center gap-4">
-                  <button
+                  {/* <button
                     onClick={handleDownload}
                     className="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                   >
                     <FaDownload className="w-4 h-4 mr-2" />
                     Download
-                  </button>
+                  </button> */}
                   <button
                     onClick={() => setIsEditing(true)}
                     className="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
@@ -299,11 +299,19 @@ Email: ${doctor.email}
                     <p className="text-sm text-gray-600">Gender</p>
                     <p className="font-medium mt-1">{doctor.gender}</p>
                   </div>
-                  <div>
+                  {/* <div>
                     <p className="text-sm text-gray-600">Speciality</p>
                     <p className="font-medium mt-1">{doctor.specializations?.join(', ') || 'Not specified'}</p>
-                  </div>
+                  </div> */}
                   <div>
+                        <p className="text-sm text-gray-600">Speciality</p>
+                        <p className="font-medium mt-1">
+                          {doctor.specializations?.length
+                            ? doctor.specializations.map(s => s.name).join(', ')
+                            : 'Not specified'}
+                        </p>
+                      </div>
+                       <div>
                     <p className="text-sm text-gray-600">Experience</p>
                     <p className="font-medium mt-1">{doctor.experienceYears} Years</p>
                   </div>

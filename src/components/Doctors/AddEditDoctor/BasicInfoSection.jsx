@@ -1,10 +1,11 @@
 import Select from 'react-select';
-import { specialityOptions } from './constants';
+//import { specialityOptions } from './constants';
 
 const BasicInfoSection = ({ 
   formData, 
   handleInputChange, 
-  handleSpecialityChange 
+  handleSpecialityChange ,
+   specialtyOptions//26
 }) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -26,7 +27,7 @@ const BasicInfoSection = ({
         <label className="block text-sm font-medium text-gray-700 mb-2">
           Speciality *
         </label>
-        <Select
+        {/* <Select
           value={formData.speciality}
           onChange={handleSpecialityChange}
           options={specialityOptions}
@@ -37,7 +38,29 @@ const BasicInfoSection = ({
           className="react-select-container"
           classNamePrefix="react-select"
           required
+        /> */}
+       <Select
+          value={formData.speciality}
+          onChange={handleSpecialityChange}
+          options={specialtyOptions}
+          isMulti
+          placeholder="Select Specialities"
         />
+        {formData.speciality?.some(s => s.value === 'other') && (
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Other Speciality
+            </label>
+            <input
+              type="text"
+              name="customSpeciality"
+              value={formData.customSpeciality || ''}
+              onChange={handleInputChange}
+              className="w-full px-4 py-2.5 border rounded-lg"
+              placeholder="Enter speciality"
+            />
+          </div>
+        )}
       </div>
 
       <div>

@@ -180,14 +180,26 @@ const DoctorsList = ({
                 {/* Specializations */}
                 <div className="mb-4">
                   <div className="flex flex-wrap gap-2">
-                    {doctor.specializations?.map((spec, index) => (
+                    {/* {doctor.specializations?.map((spec, index) => (
                       <span 
                         key={index}
                         className="bg-blue-50 text-blue-600 px-2.5 py-1 rounded-md text-xs font-medium"
                       >
                         {spec}
                       </span>
-                    ))}
+                    ))} */}
+                    {doctor.specializations?.length > 0 && (
+                      <div className="flex flex-wrap gap-2">
+                        {doctor.specializations.map(spec => (
+                          <span
+                            key={spec._id}
+                            className="px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded-full"
+                          >
+                            {spec.name}
+                          </span>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
 

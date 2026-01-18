@@ -56,7 +56,7 @@ jobs:
             set -e
 
             echo "📂 Go to Navigator frontend repo"
-            cd /home/ec2-user/assist-health/admin-frontend-master
+            cd /home/ec2-user/assist-health/navigator-frontend-master
 
             echo "⬇ Pull latest code"
             git pull origin main

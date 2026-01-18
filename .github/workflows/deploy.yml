@@ -52,11 +52,17 @@ jobs:
           timeout: 15m
           command_timeout: 15m
 
+
           script: |
             set -e
 
             echo "📂 Go to Navigator frontend repo"
             cd /home/ec2-user/assist-health/navigator-frontend-master
+
+            echo "🧹 Reset any local server changes (CI/CD safety)"
+            git fetch origin
+            git reset --hard origin/main
+            git clean -fd
 
             echo "⬇ Pull latest code"
             git pull origin main
@@ -65,3 +71,17 @@ jobs:
             cd /home/ec2-user/assist-health
             docker compose -f docker-compose.users.yml build navigator_frontend
             docker compose -f docker-compose.users.yml up -d --build navigator_frontend
+
+          # script: |
+          #   set -e
+
+          #   echo "📂 Go to Navigator frontend repo"
+          #   cd /home/ec2-user/assist-health/navigator-frontend-master
+
+          #   echo "⬇ Pull latest code"
+          #   git pull origin main
+
+          #   echo "🐳 Build & restart Navigator frontend"
+          #   cd /home/ec2-user/assist-health
+          #   docker compose -f docker-compose.users.yml build navigator_frontend
+          #   docker compose -f docker-compose.users.yml up -d --build navigator_frontend

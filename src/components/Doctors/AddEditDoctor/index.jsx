@@ -72,7 +72,7 @@ const fetchSpecialties = async () => {
   try {
     const token = localStorage.getItem('token'); // or authStorage
 
-    const res = await fetch(`${BASE_URL}/api/v1/doctors/specialties`, {
+    const res = await fetch(`/api/v1/doctors/specialties`, {
       headers: {
         Authorization: `Bearer ${token}`
       }

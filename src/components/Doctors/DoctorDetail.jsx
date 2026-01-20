@@ -105,7 +105,7 @@ const DoctorDetail = ({ doctor, onClose, onDeleteSuccess }) => {
       }
       
       setIsDeleting(true)
-      const response = await doctorsService.deleteDoctor(doctor._id)
+      const response = await doctorsService.deleteAHDoctor(doctor._id)
       console.log('Delete response:', response)
       
       // Check for success status in response

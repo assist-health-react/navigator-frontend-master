@@ -181,7 +181,7 @@ export const doctorsService = {
     }
   },
 
-  deleteDoctor: async (doctorId) => {
+  deleteAHDoctor: async (doctorId) => {
     try {
       console.log('Deleting doctor with ID:', doctorId);
       const response = await api.delete(`/api/v1/doctors/${doctorId}`);

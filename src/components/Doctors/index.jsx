@@ -129,7 +129,7 @@ const Doctors = () => {
       }
 
       console.log('Parent - fetchDoctors called with final params:', params);
-      const response = await doctorsService.getDoctors(params)
+      const response = await doctorsService.getAHDoctors(params)
       
       if (response.status === 'success') {
         setDoctors(response.data)

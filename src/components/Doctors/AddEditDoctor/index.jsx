@@ -631,10 +631,10 @@ const formattedPhone = formData.phone.replace(/\D/g, '').slice(-10);
 
       let response;
       if (isEditing) {
-        response = await doctorsService.updateDoctor(initialData._id, data);
+        response = await doctorsService.updateAHDoctor(initialData._id, data);
         console.log('Update response:', response);
       } else {
-        response = await doctorsService.createDoctor(data);
+        response = await doctorsService.createAHDoctor(data);
         console.log('Create response:', response);
       }
 

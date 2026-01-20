@@ -36,7 +36,7 @@ export const doctorsService = {
     }
   },
 
-  getDoctors: async (params = {}) => {
+  getAHDoctors: async (params = {}) => {
     try {
       const { page = 1, limit = 10, search, serviceType, languages, areas } = params;
       
@@ -152,7 +152,7 @@ export const doctorsService = {
     }
   },
 
-  createDoctor: async (doctorData) => {
+  createAHDoctor: async (doctorData) => {
     try {
       console.log('Creating doctor with data:', doctorData);
       const response = await api.post('/api/v1/doctors', doctorData, {
@@ -208,7 +208,7 @@ export const doctorsService = {
     }
   },
 
-  updateDoctor: async (doctorId, doctorData) => {
+  updateAHDoctor: async (doctorId, doctorData) => {
     try {
       console.log('Updating doctor with ID:', doctorId);
       console.log('Update data:', doctorData);

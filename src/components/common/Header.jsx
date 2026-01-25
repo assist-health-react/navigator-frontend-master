@@ -54,7 +54,7 @@ export const Header = ({ onLogout }) => {
   };
 
   return (
-   <header className="bg-white shadow-sm sticky top-0 z-[1000]">
+   <header className="bg-white shadow-sm sticky top-0 z-10">
       <div className="flex items-center justify-between h-[72px] px-8 border-b">
         <div className="flex-1">
           <h1 className="text-xl font-semibold text-gray-800">
